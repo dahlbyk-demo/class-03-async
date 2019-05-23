@@ -32,11 +32,19 @@ describe('File Reader Module', () => {
 
 
   it('reads 3 files', done => {
-    let files = ['file1.txt', 'file2.txt', 'file2.txt'];
+    let files = ['file1.txt', 'file2.txt', 'file3.txt'];
     reader(files, (err,data) => {
       expect(err).toBeNull();
       expect(data instanceof Array ).toBeTruthy();
       expect(data.length ).toBe(3);
+
+      // Do we have data in the right order?
+      expect(data).toEqual([
+        'file1.txt contents!',
+        'file2.txt contents!',
+        'file3.txt contents!',
+      ]);
+
       done();
     });
   });
