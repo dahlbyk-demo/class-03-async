@@ -15,7 +15,7 @@ const generateFileToWrite = () => {
   return `${__dirname}/../files/output/${random}.txt`;
 };
 
-describe('Copy File Promise Module', () => {
+describe('Copy File Async Module', () => {
   it('calls callback with error for missing readFile', () => {
     var copyFileResultPromise = copyFile('missingFile', 'fileToWrite');
 
@@ -23,28 +23,25 @@ describe('Copy File Promise Module', () => {
       .rejects.toBeDefined();
   });
 
-  it('calls callback with data from readFile', () => {
+  it('calls callback with data from readFile', async () => {
     let fileToWrite = generateFileToWrite();
 
-    return copyFile(fileToRead, fileToWrite)
-      .then(data => {
-        expect(data).toBeDefined();
-        // console.log(data); // shows newline, so either trim or compare with EOL
-        expect(data.toString().trim()).toBe('File 2 Contents');
-        expect(data.toString()).toBe(`File 2 Contents${EOL}`);
-      });
+    let data = await copyFile(fileToRead, fileToWrite);
+
+    expect(data).toBeDefined();
+    // console.log(data); // shows newline, so either trim or compare with EOL
+    expect(data.toString().trim()).toBe('File 2 Contents');
+    expect(data.toString()).toBe(`File 2 Contents${EOL}`);
   });
 
-  it('creates fileToWrite', () => {
+  it('creates fileToWrite', async () => {
     let fileToWrite = generateFileToWrite();
     console.log(fileToWrite);
 
-    return copyFile(fileToRead, fileToWrite)
-      .then((data) => {
-        expect(data).toBeDefined();
+    let data = await copyFile(fileToRead, fileToWrite);
+    expect(data).toBeDefined();
 
-        return fsAccess(fileToWrite, fs.constants.F_OK);
-      });
+    await fsAccess(fileToWrite, fs.constants.F_OK);
   });
 
   it('fails on fileToWrite into missing directory', () => {
